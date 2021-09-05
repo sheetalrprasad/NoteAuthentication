@@ -1,3 +1,4 @@
+#coding: utf-8 
 from flask import Flask, request
 import pandas as pd
 import numpy as np
@@ -5,9 +6,12 @@ import pickle
 import flasgger
 from flasgger import Swagger
 
+
 app=Flask(__name__)
 Swagger(app)
 
+# with open('classifier.pkl','rb', encoding='utf-8', errors=ignore) as f:
+#     classifier = pickle.load(f)
 pickle_in = open('classifier.pkl','rb')
 classifier = pickle.load(pickle_in)
 
@@ -51,25 +55,25 @@ def predict_note_authentication():
     return "The predicted value is: " + str(prediction)
 
 
-@app.route('/predict_file',methods=['POST'])
-def predict_note_file():
-    """Let's Authenticate Bank Note
-    This is using docstring for specifiations.
-    ---
-    parameters:
-        - name: file
-          in: formData
-          type: file
-          required: true
+# @app.route('/predict_file',methods=['POST'])
+# def predict_note_file():
+#     """Let's Authenticate Bank Note
+#     This is using docstring for specifiations.
+#     ---
+#     parameters:
+#         - name: file
+#           in: formData
+#           type: file
+#           required: true
 
-    responses:
-        200:
-            description: The output values
+#     responses:
+#         200:
+#             description: The output values
     
-    """
-    df_test = pd.read_csv(request.files.get("file"))
-    prediction = classifier.predict(df_test)
-    return "The predicted values for the csv is: " + str(list(prediction))
+#     """
+#     df_test = pd.read_csv(request.files.get("file"), encoding='ISO-8859-1')
+#     prediction = classifier.predict(df_test)
+#     return "The predicted values for the csv is: " + str(list(prediction))
 
 if __name__ == '__main__':
     app.run()
